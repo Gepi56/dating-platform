@@ -1,0 +1,1 @@
+SELECT * FROM media WHERE professional_id = '5a9fa17f-aa35-4cd9-ad47-94cb131b70dc';
