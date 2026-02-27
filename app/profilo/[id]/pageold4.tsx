@@ -8,6 +8,7 @@ type Props = {
 export default async function ProfiloPage({ params }: Props) {
   const { id } = await params
 
+  // Query principale
   const { data: professional, error } = await supabase
     .from('professionals')
     .select('*')
@@ -18,6 +19,7 @@ export default async function ProfiloPage({ params }: Props) {
     notFound()
   }
 
+  // Recensioni
   const { data: reviews } = await supabase
     .from('reviews')
     .select('rating, comment, created_at')
@@ -29,20 +31,20 @@ export default async function ProfiloPage({ params }: Props) {
 
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Layout a due colonne: immagine più grande (2/5) e testo (3/5) */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-        {/* Colonna sinistra: immagine (2/5 su desktop) */}
-        <div className="md:col-span-2">
-          <div className="aspect-square bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl flex items-center justify-center sticky top-24 shadow-lg">
-            <span className="text-9xl text-white font-bold">
+      {/* Layout a due colonne su desktop, una su mobile */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Colonna sinistra: immagine (più piccola) */}
+        <div className="md:col-span-1">
+          <div className="aspect-square bg-gradient-to-br from-blue-400 to-purple-500 rounded-xl flex items-center justify-center sticky top-24">
+            <span className="text-8xl text-white font-bold">
               {professional.display_name.charAt(0)}
             </span>
           </div>
         </div>
 
-        {/* Colonna destra: informazioni (3/5 su desktop) */}
-        <div className="md:col-span-3 space-y-6">
-          {/* Nome e città */}
+        {/* Colonna destra: informazioni */}
+        <div className="md:col-span-2 space-y-6">
+          {/* Intestazione con nome e città */}
           <div>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
               {professional.display_name}, {professional.age}
@@ -50,9 +52,9 @@ export default async function ProfiloPage({ params }: Props) {
             <p className="text-xl text-gray-600 mt-1">{professional.city}</p>
           </div>
 
-          {/* Rating in evidenza */}
+          {/* Rating */}
           {avgRating && (
-            <div className="flex items-center gap-3 bg-amber-50 p-4 rounded-xl border border-amber-200">
+            <div className="flex items-center gap-2 bg-amber-50 p-4 rounded-xl border border-amber-200">
               <span className="text-amber-500 text-3xl">★</span>
               <div>
                 <span className="text-2xl font-semibold text-gray-900">{avgRating}</span>
@@ -63,7 +65,7 @@ export default async function ProfiloPage({ params }: Props) {
 
           {/* Bio */}
           {professional.bio && (
-            <div>
+            <div className="prose max-w-none">
               <h2 className="text-2xl font-semibold mb-2">Chi sono</h2>
               <p className="text-gray-700 whitespace-pre-line">{professional.bio}</p>
             </div>
